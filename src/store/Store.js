@@ -1,10 +1,12 @@
 import {createStore} from 'vuex';
 
 import {getElements} from '../config/elements';
+import {getBases} from '../config/bases';
 
 export default createStore({
     state: {
-        elements:getElements()
+        elements:getElements(),
+        bases:getBases()
     },
     mutations: {
         addElement(state, payload) {

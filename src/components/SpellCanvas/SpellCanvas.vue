@@ -1,12 +1,15 @@
 <script setup>
+import Rectangle from '../Bases/Rectangle.vue'
 </script>
 
 <template>
     <div class="spell-canvas__wrapper" ref="root">
-        <div class="spell-canvas"></div>
+        <div class="spell-canvas">
+            <Rectangle />
+        </div>
     </div>
 </template>
-
+ 
 <style scoped>
 .spell-canvas {
     width: 75%;
