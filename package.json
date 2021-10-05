@@ -1,12 +1,14 @@
 {
   "name": "spell-creation-game",
   "version": "0.0.0",
+  "homepage": "https://druzhyninb.github.io/spell-game",
+
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "predeploy": "vite build --base=/spell-game/",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "bootstrap": "^5.1.1",
