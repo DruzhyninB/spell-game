@@ -3,116 +3,101 @@
  */
 
 export const getElements = () => {
-    return baseElements.map(element => {
-        return new Element(element);
-    });
+    return [...baseElements];
 }
-
-export class Element {
-    constructor(props) {
-        this.id = props.name;
-        this.label = props.label;
-        this.synergies = props.synergies;
-    }
+export const getSynergiesElements = () => {
+    return [...synergiesElements];
 }
-
-export class SynergyElement extends Element {
-    constructor(props) {
-        super(props);
-        this.parents = props.parents;
-    }
-}
-
 const baseElements = [
     {
-        name: 'light',
+        id: 'light',
         label: 'Свет',
         colors: {
-            primary: '',
-            secondary: ''
+            primary: '#fff952',
+            secondary: '#fffdbd'
         },
     },
     {
-        name: 'dark',
+        id: 'dark',
         label: 'Тьма',
         colors: {
-            primary: '',
-            secondary: ''
+            primary: '#3c0078',
+            secondary: '#290052'
         },
     },
     {
-        name: 'fire',
+        id: 'fire',
         label: 'Огонь',
         colors: {
-            primary: '',
-            secondary: ''
+            primary: '#e34f00',
+            secondary: '#e38400'
         },
     },
     {
-        name: 'water',
+        id: 'water',
         label: 'Вода',
         colors: {
-            primary: '',
-            secondary: ''
+            primary: '#006bbd',
+            secondary: '#7ac5ff'
         },
     },
     {
-        name: 'air',
+        id: 'air',
         label: 'Ветер',
         colors: {
-            primary: '',
-            secondary: ''
+            primary: '#e0feff',
+            secondary: '#edfeff'
         },
     },
     {
-        name: 'earth',
+        id: 'earth',
         label: 'Земля',
         colors: {
-            primary: '',
-            secondary: ''
+            primary: '#914b00',
+            secondary: '#784e22'
         },
     },
     {
-        name: 'electricity',
+        id: 'electricity',
         label: 'Молния',
         colors: {
-            primary: '',
-            secondary: ''
+            primary: '#ffd000',
+            secondary: '#bdfdff'
         },
     },
     // {
-    //     name: 'crystal',
+    //     id: 'crystal',
     //     label: 'Кристал',
     // },
     // {
-    //     name: 'astral',
+    //     id: 'astral',
     //     label: 'Астрал',
     // }
 ];
 
 const synergiesElements = [
     {
-        name: 'chaos',
+        id: 'chaos',
         label: 'Хаос',
         parents: [['light', 'dark']],
     },
     {
-        name: 'white_fire',
+        id: 'white_fire',
         label: 'Белое Пламя',
         parents: [['light', 'fire']],
     },
     {
-        name: 'black_fire',
+        id: 'black_fire',
         label: 'Черное пламя',
         parents: [['dark', 'fire']],
     },
     {
-        name: 'holy_water',
+        id: 'holy_water',
         label: 'Святая Вода',
         parents: [['light', 'water'],]
     },
     {
-        name: 'poison',
+        id: 'poison',
         label: 'Яд',
         parents: [
             ['dark', 'water'],
@@ -121,62 +106,62 @@ const synergiesElements = [
         ],
     },
     {
-        name: 'steam',
+        id: 'steam',
         label: 'Пар',
         parents: [['fire', 'water']],
     },
     {
-        name: 'flash',
+        id: 'flash',
         label: 'Вспышка',
         parents: [['light', 'air']],
     },
     {
-        name: 'fire_tornado',
+        id: 'fire_tornado',
         label: 'Огненое торнадо',
         parents: [['fire', 'air']],
     },
     {
-        name: 'ice',
+        id: 'ice',
         label: 'Лед',
         parents: [['air', 'water']],
     },
     {
-        name: 'life',
+        id: 'life',
         label: 'Жизнь',
         parents: [['light', 'earth']],
     },
     {
-        name: 'corruption',
+        id: 'corruption',
         label: 'Разложение',
         parents: [['dark', 'earth']],
     },
     {
-        name: 'lava',
+        id: 'lava',
         label: 'Лава',
         parents: [['fire', 'earth']],
     },
     {
-        name: 'tree',
+        id: 'tree',
         label: 'Дерево',
         parents: [['water', 'earth']],
     },
     {
-        name: 'dust',
+        id: 'dust',
         label: 'Пыль',
         parents: [['air', 'earth']],
     },
     {
-        name: 'teleport',
+        id: 'teleport',
         label: 'Телепорт',
         parents: [['electricity', 'light']],
     },
     {
-        name: 'dark_ightning',
+        id: 'dark_ightning',
         label: 'Темная молния',
         parents: [['electricity', 'dark']],
     },
     {
-        name: 'plasma',
+        id: 'plasma',
         label: 'Плазма',
         parents: [
             ['electricity', 'fire'],
@@ -184,17 +169,17 @@ const synergiesElements = [
         ],
     },
     {
-        name: 'explosion',
+        id: 'explosion',
         label: 'Взрыв',
         parents: [['electricity', 'earth']],
     },
     // {
-    //     name: 'enhance',
+    //     id: 'enhance',
     //     label: 'Усилиние',
     //     parents: [['fire', 'earth']],
     // },
     // {
-    //     name: 'resistance',
+    //     id: 'resistance',
     //     label: 'Сопротивление',
     //     parents: [['fire', 'earth']],
     // },

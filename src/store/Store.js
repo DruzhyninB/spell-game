@@ -1,18 +1,22 @@
 import {createStore} from 'vuex';
 
 import {getElements} from '../config/elements';
+import {getSources} from '../config/sources';
 import {getBases} from '../config/bases';
 
 export default createStore({
     state: {
         elements: getElements(),
+        sources: getSources(),
         bases: getBases(),
 
         //Spell
         base: {
             type: '',
+            source: null,
             apexes: {}, // {id:{apex}}
-            synergies: {} // {id:{apex}}
+            synergies: {}, // {id:{apex}},
+            sources: {}, // {id:{source}}
         },
     },
     mutations: {
@@ -23,14 +27,20 @@ export default createStore({
             state.base = {
                 type: '',
                 apexes: {},
-                synergies: {}
+                synergies: {},
+                sources: {}
             };
         },
         setElementToApex (state, {apex, element}) {
-            state.base.apexes[apex].element = element;
+            let elementObj = state.elements.find(e => e.id === element);
+            state.base.apexes[apex].element = elementObj;
         },
         setElementToSynergy (state, {synergy, element}) {
             state.base.synergies[synergy].element = element;
+        },
+        setElementToSource (state, {source, element}) {
+            let sourceObj = state.sources.find(e => e.id === element);
+            state.base.sources[source].element = sourceObj;
         },
     },
     getters: {
@@ -57,11 +67,22 @@ export default createStore({
                     element: null
                 }
             }), {});
+            state.base.sources = base.sources.reduce((acc, source) => ({
+                ...acc,
+                [source.id]: {
+                    ...source,
+                    element: null
+                }
+            }), {});
         },
 
         dropElement ({commit, dispatch}, {apex, element}) {
             commit('setElementToApex', {apex, element});
             dispatch('digestSynergies');
+        },
+
+        dropSource ({commit, dispatch}, {source, element}) {
+            commit('setElementToSource', {source, element});
         },
 
         digestSynergies ({commit, state}) {
@@ -72,8 +93,8 @@ export default createStore({
                     state.base.apexes[parentsIds[0]],
                     state.base.apexes[parentsIds[1]],
                 ];
-                if(parents[0]?.element && parents[1]?.element) {
-                    commit('setElementToSynergy', {synergy, element:'red'})
+                if (parents[0]?.element && parents[1]?.element) {
+                    commit('setElementToSynergy', {synergy, element: 'red'})
                 }
             })
         }

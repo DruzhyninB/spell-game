@@ -39,17 +39,10 @@
                     cy="4.41656"
                     cx="33.32589"
                     stroke="#000"
-                    fill="transparent"
-                />
-
-                <ellipse
-                    ry="3"
-                    rx="3"
-                    cy="4.41656"
-                    cx="33.32589"
-                    stroke="transparent"
-                    fill="red"
-                    v-if="base.apexes?.top_apex?.element"
+                    :fill="
+                        base.apexes?.top_apex?.element?.colors.primary ||
+                        'transparent'
+                    "
                 />
 
                 <ellipse
@@ -60,18 +53,11 @@
                     cy="55.53351"
                     cx="4.41656"
                     stroke="#000"
-                    fill="transparent"
+                    :fill="
+                        base.apexes?.left_apex?.element?.colors.primary ||
+                        'transparent'
+                    "
                 />
-                <ellipse
-                    ry="3.41656"
-                    rx="3.41656"
-                    cy="55.53351"
-                    cx="4.41656"
-                    stroke="#000"
-                    fill="green"
-                    v-if="base.apexes?.left_apex?.element"
-                />
-
                 <ellipse
                     ref="rightApex"
                     id="right_apex"
@@ -80,18 +66,18 @@
                     cy="56.05913"
                     cx="60.92116"
                     stroke="#000"
-                    fill="transparent"
+                    :fill="
+                        base.apexes?.right_apex?.element?.colors.primary ||
+                        'transparent'
+                    "
                 />
-                <ellipse
-                    ry="3.41656"
-                    rx="3.41656"
-                    cy="56.05913"
-                    cx="60.92116"
-                    stroke="#000"
-                    fill="blue"
-                    v-if="base.apexes?.right_apex?.element"
-                />
-                <g class="synergy left" :class="{appear: base.synergies?.left_synergy_apex?.element}">
+
+                <g
+                    class="synergy left"
+                    :class="{
+                        appear: base.synergies?.left_synergy_apex?.element,
+                    }"
+                >
                     <!-- Left synergy -->
                     <line
                         stroke="#000"
@@ -121,7 +107,12 @@
                         fill="transparent"
                     />
                 </g>
-                <g class="synergy right" :class="{appear: base.synergies?.right_synergy_apex?.element}">
+                <g
+                    class="synergy right"
+                    :class="{
+                        appear: base.synergies?.right_synergy_apex?.element,
+                    }"
+                >
                     <!-- Right synergy -->
                     <line
                         stroke="#000"
@@ -153,7 +144,12 @@
                 </g>
 
                 <!-- Bottom synergy -->
-                <g class="synergy bottom" :class="{appear: base.synergies?.bottom_synergy_apex?.element}">
+                <g
+                    class="synergy bottom"
+                    :class="{
+                        appear: base.synergies?.bottom_synergy_apex?.element,
+                    }"
+                >
                     <line
                         stroke="#000"
                         id="bottom_synergy_1"
@@ -186,7 +182,12 @@
         </div>
         <!-- Source -->
         <div class="sg-source__wrapper">
-            <div class="sg-source__dropzone"></div>
+            <div class="sg-source__dropzone" id="sourceDropzone" ref="sourceDropzone">
+                <SourceOrb
+                    v-if="base.sources?.sourceDropzone?.element"
+                    :source="base.sources?.sourceDropzone?.element"
+                />
+            </div>
             <svg viewBox="0 0 100 100">
                 <path
                     id="curve-path"
@@ -204,6 +205,7 @@
 </template>
 
 <script setup>
+import SourceOrb from "../SourceOrb/SourceOrb.vue";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import interact from "interactjs";
@@ -212,6 +214,8 @@ const store = useStore();
 const topApex = ref(null);
 const rightApex = ref(null);
 const leftApex = ref(null);
+const sourceDropzone = ref(null);
+
 const base = computed(() => store.state.base);
 
 onMounted(() => {
@@ -247,30 +251,42 @@ function registerBase() {
                 parents: ["left_apex", "right_apex"],
             },
         ],
+        sources: [{ id: "sourceDropzone" }],
     });
 }
 
 function enableDropzones() {
     // Top Apex Dropzone
     interact(topApex.value).dropzone({
-        accept: ".sg-element",
-        ondrop: onDrop,
+        accept: ".sg-element__orb",
+        ondrop: onElementDrop,
     });
     interact(rightApex.value).dropzone({
-        accept: ".sg-element",
-        ondrop: onDrop,
+        accept: ".sg-element__orb",
+        ondrop: onElementDrop,
     });
     interact(leftApex.value).dropzone({
-        accept: ".sg-element",
-        ondrop: onDrop,
+        accept: ".sg-element__orb",
+        ondrop: onElementDrop,
+    });
+
+    interact(sourceDropzone.value).dropzone({
+        accept: ".sg-source__orb",
+        ondrop: onSourceDrop,
     });
 }
 
-function onDrop(event) {
-    store.dispatch('dropElement',{
-        apex:event.target.id,
-        element:event.relatedTarget.dataset.element,
-    })
+function onElementDrop(event) {
+    store.dispatch("dropElement", {
+        apex: event.target.id,
+        element: event.relatedTarget.dataset.element,
+    });
+}
+function onSourceDrop(event) {
+    store.dispatch("dropSource", {
+        source: event.target.id,
+        element: event.relatedTarget.dataset.element,
+    });
 }
 </script>
 

@@ -1,36 +1,88 @@
 <script setup>
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, reactive } from "vue";
 
-import Element from "./Element/Element.vue";
+import ElementItem from "./ElementItem/ElementItem.vue";
+import SourceItem from "./SourceItem/SourceItem.vue";
 
 const store = useStore();
-const spells = computed(() => store.state.elements);
+const elements = computed(() => store.state.elements);
+const sources = computed(() => store.state.sources);
+
+let state = reactive({
+    activeTab: 0,
+});
 </script>
 
 <template>
     <div class="spell-menu">
-        <div class="spell-menu__wrapper">
+        <div class="spell-menu__bar">
+            <div
+                class="spell-menu__bar-item"
+                :class="{ active: state.activeTab === 0 }"
+                @click="state.activeTab = 0"
+            >
+                Элементы
+            </div>
+            <div
+                class="spell-menu__bar-item"
+                :class="{ active: state.activeTab === 1 }"
+                @click="state.activeTab = 1"
+            >
+                Источники
+            </div>
+            <div
+                class="spell-menu__bar-item"
+                :class="{ active: state.activeTab === 2 }"
+                @click="state.activeTab = 2"
+            >
+                Базы
+            </div>
+            <div
+                class="spell-menu__bar-item"
+                :class="{ active: state.activeTab === 3 }"
+                @click="state.activeTab = 3"
+            >
+                Формы
+            </div>
+        </div>
+
+        <div class="spell-menu__wrapper" v-if="state.activeTab === 0">
             <div class="spell-menu__title">Элементы</div>
             <div class="spell-menu__container">
-                <Element
+                <ElementItem
                     :className="'spell-menu__item'"
-                    :item="spell"
-                    v-for="spell in spells"
-                    :key="spell.name"
+                    :item="element"
+                    v-for="element in elements"
+                    :key="element.id"
                 />
             </div>
+        </div>
+
+        <div class="spell-menu__wrapper" v-if="state.activeTab === 1">
+            <div class="spell-menu__title">Источники силы</div>
+            <div class="spell-menu__container">
+                <SourceItem
+                    :className="'spell-menu__item'"
+                    :item="source"
+                    v-for="source in sources"
+                    :key="source.id"
+                />
+            </div>
+        </div>
+        <div class="spell-menu__wrapper" v-if="state.activeTab === 2">
+            <div class="spell-menu__title">Базы</div>
+            <div class="spell-menu__container"></div>
+        </div>
+        <div class="spell-menu__wrapper" v-if="state.activeTab === 3">
+            <div class="spell-menu__title">Формы</div>
+            <div class="spell-menu__container"></div>
         </div>
     </div>
 </template>
 
 <style scoped lang="scss">
 .spell-menu {
-    &__title {
-        font-size: 2rem;
-        text-align: center;
-        letter-spacing: 2px;
-    }
     width: 100%;
     height: 70vh;
     position: relative;
@@ -49,8 +101,13 @@ const spells = computed(() => store.state.elements);
         background-repeat: no-repeat;
         background-size: 130%;
         background-position: 7% 75%;
-        background-image: url(/src/assets/book1.png);
+        background-image: url(/src/assets/book.png);
         z-index: -1;
+    }
+    &__title {
+        font-size: 2rem;
+        text-align: center;
+        letter-spacing: 2px;
     }
     &__wrapper {
         width: 80%;
@@ -59,6 +116,35 @@ const spells = computed(() => store.state.elements);
     &__container {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
+    }
+
+    &__bar {
+        display: flex;
+        position: absolute;
+        top: 3%;
+        left: 6%;
+        &-item {
+            background-repeat: no-repeat;
+            background-size: 260px;
+            background-position: -12px -14px;
+            padding: 5px 10px;
+            background-image: url(/src/assets/book.png);
+            box-shadow: inset -6px 0px 6px -6px #000000;
+            transition: all 0.45 linear;
+            cursor: pointer;
+            &:last-of-type,
+            &.active {
+                box-shadow: inset 0px 0px 0px 0px #000000;
+            }
+
+            &.active + & {
+                box-shadow: inset -6px 0px 6px -6px #000000,
+                    inset 6px 0px 6px -6px #000000;
+                &:last-of-type {
+                    box-shadow: inset 6px 0px 6px -6px #000000;
+                }
+            }
+        }
     }
 }
 </style>
