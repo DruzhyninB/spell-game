@@ -6,11 +6,20 @@ const props = defineProps({
     item: Object,
     className: String,
 });
-let draggable,
-    startPos,
-    snapTargets = [];
 
 const root = ref(null);
+
+onMounted(function () {
+    enableDraggable();
+});
+
+function resetPosition() {
+    root.value.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
+
+    // update the posiion attributes
+    root.value.setAttribute("data-x", 0);
+    root.value.setAttribute("data-y", 0);
+}
 const moveListener = (event) => {
     var target = event.target;
     // keep the dragged position in the data-x/data-y attributes
@@ -24,45 +33,26 @@ const moveListener = (event) => {
     target.setAttribute("data-x", x);
     target.setAttribute("data-y", y);
 };
-function onDragStart(event) {
-    if (!startPos) {
-        var rect = interact.getElementRect(event.target);
 
-        // record center point when starting the very first a drag
-        startPos = {
-            x: rect.left + rect.width / 2,
-            y: rect.top + rect.height / 2,
-        };
-    }
-
-    // snap to the start position
-    snapTargets.length = 0;
-    snapTargets.push(startPos);
+function onDragEnd() {
+    resetPosition();
 }
-onMounted(function () {
-    draggable = interact(root.value)
+
+function enableDraggable() {
+    interact(root.value)
         .draggable({
             inertia: true,
             autoScroll: true,
-            modifiers: [
-                interact.modifiers.snap({
-                    targets: snapTargets,
-                    relativePoints: [
-                        { x: 0.5, y: 0.5 }, // to the center
-                    ],
-                    endOnly: true,
-                }),
-            ],
             listeners: {
                 move: moveListener,
+                end: onDragEnd,
             },
         })
-        .on("dragstart", onDragStart);
-});
+}
 </script>
 
 <template>
-    <div :class="`${className} sg-element`" ref="root">
+    <div :class="`${className} sg-element`" ref="root" :data-element="item.id">
         <div class="sg-element__icon">
             <div class="sg-element__icon-spark"></div>
             <div class="sg-element__icon-spark"></div>

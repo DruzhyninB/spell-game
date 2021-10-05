@@ -10,7 +10,7 @@ export const getElements = () => {
 
 export class Element {
     constructor(props) {
-        this.id = props.id;
+        this.id = props.name;
         this.label = props.label;
         this.synergies = props.synergies;
     }

@@ -1,10 +1,31 @@
-<svg viewBox="-10 -10 110 110"  xmlns="http://www.w3.org/2000/svg">
- <g>
-  <ellipse ry="4.7541" rx="4.7541" id="svg_1" cy="4.7541" cx="50" stroke="#000" fill="transparent"/>
-  <ellipse ry="4.7541" rx="4.7541" id="svg_3" cy="95.2459" cx="95.2459" stroke="#000" fill="transparent"/>
-  <ellipse ry="4.7541" rx="4.7541" id="svg_4" cy="95.2459" cx="4.7541" stroke="#000" fill="transparent"/>
-  <line stroke="#000" id="svg_5" y2="95" x2="90.30521" y1="95" x1="9.59016" fill="none"/>
-  <line stroke="#000" id="svg_7" y2="9.2623" x2="47.86885" y1="90.73771" x1="7.13115" fill="none"/>
-  <line stroke="#000" id="svg_8" y2="8.91304" x2="51.96721" y1="90.76087" x1="93.11476" fill="none"/>
- </g>
+<svg viewBox="0 0 66 75" xmlns="http://www.w3.org/2000/svg">
+    <g id="Layer_1">
+        <title>Layer 1</title>
+        <line stroke="#000" id="bottom" y2="56.19054" x2="7.64329" y1="56.19054" x1="57.3046" fill="none" />
+        <line stroke="#000" id="left" y2="7.10303" x2="31.62739" y1="52.45008" x1="6.40888" fill="none" />
+        <line stroke="#000" id="right" y2="6.96996" x2="35.15579" y1="52.79588" x1="59.51894" fill="none" />
+        
+        <ellipse ry="3.41656" rx="3.41656" id="top_apex" cy="4.41656" cx="33.32589" stroke="#000" fill="none" />
+        <ellipse ry="3.41656" rx="3.41656" id="left_apex" cy="55.53351" cx="4.41656" stroke="#000" fill="none" />
+        <ellipse ry="3.41656" rx="3.41656" id="right_apex" cy="56.05913" cx="60.92116" stroke="#000" fill="none" />
+
+        <!-- Left synergy -->
+        <line stroke="#000" id="left_synergy_1" y2="5.60928" x2="29.96236" y1="16.51821" x1="7.74418" fill="none" />
+        <line stroke="#000" id="left_synergy_2" y2="52.17487" x2="4.41656" y1="21.83808" x1="4.41656" fill="none" />
+        <ellipse id="left_synergy_apex" ry="3.41656" rx="3.41656" cy="18.08279" cx="4.54796" stroke="#000"
+            fill="none" />
+
+        <!-- Right synergy -->
+        <line stroke="#000" id="right_synergy_1" y2="5.48875" x2="36.69186" y1="16.88917" x1="58.77375" fill="none" />
+        <line stroke="#000" id="right_synergy_2" y2="22.36126" x2="61.97241" y1="52.76498" x1="61.97241" fill="none" />
+        <ellipse id="right_synergy_apex" ry="3.41656" rx="3.41656" cy="18.477" cx="61.70959" stroke="#000"
+            fill="none" />
+
+        <!-- Bottom synergy -->
+        <line stroke="#000" id="bottom_synergy_1" y2="58.26159" x2="58.12161" y1="69.68313" x1="36.46006" fill="none" />
+        <line stroke="#000" id="bottom_synergy_2" y2="69.52565" x2="30.35658" y1="57.76771" x1="7.25691" fill="none" />
+        <ellipse id="bottom_synergy_apex" ry="3.41656" rx="3.41656" cy="71.03942" cx="33.5887" stroke="#000"
+            fill="none" />
+    </g>
+
 </svg>
