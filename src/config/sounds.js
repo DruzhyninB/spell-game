@@ -1,8 +1,8 @@
 export default {
-    'base-appear': 'src/assets/sound/base-appear.wav',
-    'spell-generating': 'src/assets/sound/spell-generating.wav',
-    'element-pickup': 'src/assets/sound/element-pickup.wav',
-    'element-place-fail': 'src/assets/sound/element-place-fail.wav',
-    'element-drop': 'src/assets/sound/element-drop.wav' ,
-    'background': 'src/assets/sound/background.mp3',
+    'base-appear': 'sound/base-appear.wav',
+    'spell-generating': 'sound/spell-generating.wav',
+    'element-pickup': 'sound/element-pickup.wav',
+    'element-place-fail': 'sound/element-place-fail.wav',
+    'element-drop': 'sound/element-drop.wav' ,
+    'background': 'sound/background.mp3',
 };
