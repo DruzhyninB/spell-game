@@ -1,11 +1,23 @@
 <script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
+import { inject, computed } from "vue";
+import { useStore } from "vuex";
+
+// Components
 import Layout from "./components/Layout/Layout.vue";
+import Loading from "./components/Layout/Layout.vue";
+
+const store = useStore();
+const audio = inject("audio");
+
+audio.loaded.then(() => {
+    store.commit('loaded', {system:'audio', loaded:true});
+    audio.play('background', {loop:true, volume:0.05});
+});
 </script>
 
 <template>
-    <Layout />
+    <Loading v-if="!store.getters.isLoading" />
+    <Layout v-else />
 </template>
 
 <style>

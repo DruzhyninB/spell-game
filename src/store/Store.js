@@ -10,6 +10,10 @@ export default createStore({
         sources: getSources(),
         bases: getBases(),
 
+        loaded:{
+            audio:false
+        },
+
         //Spell
         base: {
             type: '',
@@ -18,8 +22,12 @@ export default createStore({
             synergies: {}, // {id:{apex}},
             sources: {}, // {id:{source}}
         },
+        //Assets
     },
     mutations: {
+        loaded(state, {system, loaded} ){
+            state.loaded[system] = loaded;
+        },
         addElement (state, payload) {
             state.elements.push(payload);
         },
@@ -44,6 +52,9 @@ export default createStore({
         },
     },
     getters: {
+        isLoading: state => {
+            return state.loaded.audio;
+        },
         getSynergy: state => (elements) => {
             return false;
         }

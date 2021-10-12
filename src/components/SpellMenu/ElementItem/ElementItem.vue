@@ -1,6 +1,7 @@
 <script setup>
 import interact from "interactjs";
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted, reactive, inject } from "vue";
+const audio = inject('audio');
 
 const props = defineProps({
     item: Object,
@@ -8,6 +9,7 @@ const props = defineProps({
 });
 
 const orb = ref(null);
+
 let state = reactive({
     isMoving:false
 });
@@ -24,6 +26,9 @@ function resetPosition() {
     orb.value.setAttribute("data-y", 0);
 
     state.isMoving = false;
+}
+const startListener = () => {
+    audio.play('element-pickup');
 }
 const moveListener = (event) => {
     var target = event.target;
@@ -43,6 +48,7 @@ const moveListener = (event) => {
 
 function onDragEnd() {
     resetPosition();
+    audio.play('element-drop');
     state.isMoving = false;
 }
 
@@ -51,6 +57,7 @@ function enableDraggable() {
         inertia: true,
         autoScroll: true,
         listeners: {
+            start: startListener,
             move: moveListener,
             end: onDragEnd,
         },
