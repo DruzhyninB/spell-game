@@ -1,5 +1,5 @@
 <script setup>
-import Rectangle from '../Bases/Rectangle.vue'
+import Rectangle from '../spell-components/Bases/Rectangle.vue'
 </script>
 
 <template>

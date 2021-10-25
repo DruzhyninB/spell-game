@@ -42,50 +42,49 @@ const props = defineProps({
     align-items: center;
     justify-content: center;
 
-        &__core {
-            // animation: element-core-anim ease-in-out 1s infinite;
-            background: var(--primary);
-            width: 40%;
-            height: 40%;
-            border-radius: 100%;
-            background-size: 100% 100%;
-            background-position: center;
-            background-repeat: no-repeat;
-            transform-origin: center;
-            transform: scale(1);
+    &__core {
+        // animation: element-core-anim ease-in-out 1s infinite;
+        background: var(--primary);
+        width: 40%;
+        height: 40%;
+        border-radius: 100%;
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        transform-origin: center;
+        transform: scale(1);
 
-            box-shadow: 0 0 12px white,
-                0 -3px 6px rgba(255, 255, 255, 0.5) inset,
-                0 -18px 24px black inset;
+        box-shadow: 0 0 12px white, 0 -3px 6px rgba(255, 255, 255, 0.5) inset,
+            0 -18px 24px black inset;
 
-            &:after {
-                width: 2px;
-                height: 2px;
-                content: '';
-                display: block;
-                border-radius: 50%;
-                background: transparent;
-                margin: 0 auto;
-                position: relative;
-                top: 12px;
-                left: 42px;
-                box-shadow: -42px -6px 6px 6px rgba(255, 255, 255, 0.5);
-                transition: all 0.5s;
-            }
-            &:before {
-                width: 42px;
-                height: 6px;
-                content: "";
-                display: block;
-                border-radius: 50%;
-                background: transparent;
-                margin: 0 auto;
-                position: absolute;
-                top: 20px;
-                box-shadow: 0 20px 9px 1px rgba(0, 0, 0, 0.5);
-                transition: all 0.5s;
-            }
+        &:after {
+            width: 2px;
+            height: 2px;
+            content: "";
+            display: block;
+            border-radius: 50%;
+            background: transparent;
+            margin: 0 auto;
+            position: relative;
+            top: 12px;
+            left: 42px;
+            box-shadow: -42px -6px 6px 6px rgba(255, 255, 255, 0.5);
+            transition: all 0.5s;
         }
+        &:before {
+            width: 42px;
+            height: 6px;
+            content: "";
+            display: block;
+            border-radius: 50%;
+            background: transparent;
+            margin: 0 auto;
+            position: absolute;
+            top: 20px;
+            box-shadow: 0 20px 9px 1px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s;
+        }
+    }
     &__orbit {
         animation: linear 2s backwards infinite;
         position: absolute;

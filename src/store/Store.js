@@ -1,17 +1,19 @@
 import {createStore} from 'vuex';
 
 import {getElements} from '../config/elements';
+import {getSynergies} from '../config/elements';
 import {getSources} from '../config/sources';
 import {getBases} from '../config/bases';
 
 export default createStore({
     state: {
         elements: getElements(),
+        synergies: getSynergies(),
         sources: getSources(),
         bases: getBases(),
 
-        loaded:{
-            audio:false
+        loaded: {
+            audio: false
         },
 
         //Spell
@@ -22,10 +24,13 @@ export default createStore({
             synergies: {}, // {id:{apex}},
             sources: {}, // {id:{source}}
         },
-        //Assets
+        // Dashboard
+        dashboard: {
+            element: null
+        }
     },
     mutations: {
-        loaded(state, {system, loaded} ){
+        loaded (state, {system, loaded}) {
             state.loaded[system] = loaded;
         },
         addElement (state, payload) {
@@ -40,23 +45,42 @@ export default createStore({
             };
         },
         setElementToApex (state, {apex, element}) {
-            let elementObj = state.elements.find(e => e.id === element);
-            state.base.apexes[apex].element = elementObj;
+            state.base.apexes[apex].element = element;
         },
         setElementToSynergy (state, {synergy, element}) {
             state.base.synergies[synergy].element = element;
         },
         setElementToSource (state, {source, element}) {
-            let sourceObj = state.sources.find(e => e.id === element);
-            state.base.sources[source].element = sourceObj;
+            state.base.sources[source].element = element;
         },
+        setDashboardElement (state, {element}) {
+            console.log('setted', element);
+            state.dashboard.element = element;
+        }
     },
     getters: {
         isLoading: state => {
             return state.loaded.audio;
         },
-        getSynergy: state => (elements) => {
-            return false;
+        getElementById: state => id => {
+            return state.elements.find(e => e.id === id);
+        },
+        getSourceById: state => id => {
+            return state.sources.find(e => e.id === id);
+        },
+        getSynergyById: state => id => {
+            return state.synergies.find(e => e.id === id);
+        },
+        getSynergyByElements: state => (elements) => {
+            console.log(elements)
+            if (elements[0] && elements[1]) {
+                let elementsIds = elements.map(e => e.id);
+                let el = state.synergies.find(s => s.parents.some(p => p.every(p => elementsIds.includes(p))));
+                console.log(el);
+                return el;
+            } else {
+                return undefined;
+            }
         }
     },
     actions: {
@@ -64,6 +88,7 @@ export default createStore({
             commit('resetActiveBase');
 
             state.base.type = base.type;
+
             state.base.apexes = base.apexes.reduce((acc, apex) => ({
                 ...acc,
                 [apex.id]: {
@@ -87,27 +112,38 @@ export default createStore({
             }), {});
         },
 
-        dropElement ({commit, dispatch}, {apex, element}) {
-            commit('setElementToApex', {apex, element});
+        dropElement ({commit, dispatch, getters}, {apex, element}) {
+            commit('setElementToApex', {
+                apex,
+                element: getters.getElementById(element)
+            });
             dispatch('digestSynergies');
         },
 
-        dropSource ({commit, dispatch}, {source, element}) {
-            commit('setElementToSource', {source, element});
+        dropSource ({commit, getters}, {source, element}) {
+            commit('setElementToSource', {
+                source,
+                element: getters.getSourceById(element)
+            });
         },
 
-        digestSynergies ({commit, state}) {
-            Object.keys(state.base.synergies).forEach(synergy => {
+        digestSynergies ({commit, getters, state}) {
+            Object.keys(state.base.synergies).forEach(synergy_id => {
 
-                let parentsIds = state.base.synergies[synergy].parents;
-                let parents = [
-                    state.base.apexes[parentsIds[0]],
-                    state.base.apexes[parentsIds[1]],
-                ];
-                if (parents[0]?.element && parents[1]?.element) {
-                    commit('setElementToSynergy', {synergy, element: 'red'})
+                let parentsIds = state.base.synergies[synergy_id].parents;
+                let elements = [state.base.apexes[parentsIds[0]].element, state.base.apexes[parentsIds[1]].element];
+                let synergy_el = getters.getSynergyByElements(elements);
+                if (synergy_el) {
+                    commit('setElementToSynergy', {synergy: synergy_id, element: synergy_el})
                 }
             })
+        },
+
+        hoverElement ({commit, getters}, {elementId}) {
+            commit('setDashboardElement', {
+                element: elementId ? getters.getElementById(elementId) : false
+            })
         }
+
     }
 });

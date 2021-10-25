@@ -1,3 +1,88 @@
+<script setup>
+import SourceOrb from "../SourceOrb/SourceOrb.vue";
+import { ref, onMounted, computed } from "vue";
+import { useStore } from "vuex";
+import interact from "interactjs";
+const store = useStore();
+
+const topApex = ref(null);
+const rightApex = ref(null);
+const leftApex = ref(null);
+const sourceDropzone = ref(null);
+
+const base = computed(() => store.state.base);
+
+onMounted(() => {
+    enableDropzones();
+    registerBase();
+});
+
+function registerBase() {
+    store.dispatch("setActiveBase", {
+        type: "triangle",
+        apexes: [{ id: "top" }, { id: "right" }, { id: "left" }],
+        synergies: [
+            {
+                id: "left_synergy",
+                parents: ["top", "left"],
+            },
+            {
+                id: "right_synergy",
+                parents: ["top", "right"],
+            },
+            {
+                id: "bottom_synergy",
+                parents: ["left", "right"],
+            },
+        ],
+        sources: [{ id: "source" }],
+    });
+}
+
+function enableDropzones() {
+    // Top Apex Dropzone
+    interact(topApex.value).dropzone({
+        accept: ".sg-element__orb",
+        ondrop: onElementDrop,
+    });
+    interact(rightApex.value).dropzone({
+        accept: ".sg-element__orb",
+        ondrop: onElementDrop,
+    });
+    interact(leftApex.value).dropzone({
+        accept: ".sg-element__orb",
+        ondrop: onElementDrop,
+    });
+
+    interact(sourceDropzone.value).dropzone({
+        accept: ".sg-source__orb",
+        ondrop: onSourceDrop,
+    });
+}
+
+function onElementDrop(event) {
+    store.dispatch("dropElement", {
+        apex: event.target.dataset.apex,
+        element: event.relatedTarget.dataset.element,
+    });
+}
+function onSourceDrop(event) {
+    store.dispatch("dropSource", {
+        source: event.target.id,
+        element: event.relatedTarget.dataset.element,
+    });
+}
+
+function onHover(apexId) {
+    return (isHover) => {
+        if (isHover) {
+            store.dispatch("hoverElement", { elementId });
+        } else {
+            store.dispatch("hoverElement", { elementId: false });
+        }
+    };
+}
+</script>
 <template>
     <div class="sg-base-rectangle">
         <!-- Custome shape -->
@@ -39,8 +124,10 @@
                     cy="4.41656"
                     cx="33.32589"
                     stroke="#000"
+                    data-apex="top"
+                    v-hover="onHover(base.apexes?.top?.element?.id)"
                     :fill="
-                        base.apexes?.top_apex?.element?.colors.primary ||
+                        base.apexes?.top?.element?.colors.primary ||
                         'transparent'
                     "
                 />
@@ -53,8 +140,10 @@
                     cy="55.53351"
                     cx="4.41656"
                     stroke="#000"
+                    data-apex="left"
+                    v-hover="onHover(base.apexes?.left?.element?.id)"
                     :fill="
-                        base.apexes?.left_apex?.element?.colors.primary ||
+                        base.apexes?.left?.element?.colors.primary ||
                         'transparent'
                     "
                 />
@@ -66,8 +155,10 @@
                     cy="56.05913"
                     cx="60.92116"
                     stroke="#000"
+                    data-apex="right"
+                    v-hover="onHover(base.apexes?.right?.element?.id)"
                     :fill="
-                        base.apexes?.right_apex?.element?.colors.primary ||
+                        base.apexes?.right?.element?.colors.primary ||
                         'transparent'
                     "
                 />
@@ -75,7 +166,7 @@
                 <g
                     class="synergy left"
                     :class="{
-                        appear: base.synergies?.left_synergy_apex?.element,
+                        appear: base.synergies?.left_synergy?.element,
                     }"
                 >
                     <!-- Left synergy -->
@@ -104,13 +195,17 @@
                         cy="18.08279"
                         cx="4.54796"
                         stroke="#000"
-                        fill="transparent"
+                        v-hover="onHover(base.apexes?.left_synergy?.element?.id)"
+                        :fill="
+                            base.synergies?.left_synergy?.element?.colors
+                                .primary || 'transparent'
+                        "
                     />
                 </g>
                 <g
                     class="synergy right"
                     :class="{
-                        appear: base.synergies?.right_synergy_apex?.element,
+                        appear: base.synergies?.right_synergy?.element,
                     }"
                 >
                     <!-- Right synergy -->
@@ -139,7 +234,11 @@
                         cy="18.477"
                         cx="61.70959"
                         stroke="#000"
-                        fill="transparent"
+                        v-hover="onHover(base.apexes?.right_synergy?.element?.id)"
+                        :fill="
+                            base.synergies?.right_synergy?.element?.colors
+                                .primary || 'transparent'
+                        "
                     />
                 </g>
 
@@ -147,7 +246,7 @@
                 <g
                     class="synergy bottom"
                     :class="{
-                        appear: base.synergies?.bottom_synergy_apex?.element,
+                        appear: base.synergies?.bottom_synergy?.element,
                     }"
                 >
                     <line
@@ -175,17 +274,21 @@
                         cy="71.03942"
                         cx="33.5887"
                         stroke="#000"
-                        fill="transparent"
+                        v-hover="onHover(base.apexes?.bottom_synergy?.element?.id)"
+                        :fill="
+                            base.synergies?.bottom_synergy?.element?.colors
+                                .primary || 'transparent'
+                        "
                     />
                 </g>
             </svg>
         </div>
         <!-- Source -->
         <div class="sg-source__wrapper">
-            <div class="sg-source__dropzone" id="sourceDropzone" ref="sourceDropzone">
+            <div class="sg-source__dropzone" id="source" ref="sourceDropzone">
                 <SourceOrb
-                    v-if="base.sources?.sourceDropzone?.element"
-                    :source="base.sources?.sourceDropzone?.element"
+                    v-if="base.sources?.source?.element"
+                    :source="base.sources?.source?.element"
                 />
             </div>
             <svg viewBox="0 0 100 100">
@@ -203,92 +306,6 @@
         </div>
     </div>
 </template>
-
-<script setup>
-import SourceOrb from "../SourceOrb/SourceOrb.vue";
-import { ref, onMounted, computed } from "vue";
-import { useStore } from "vuex";
-import interact from "interactjs";
-const store = useStore();
-
-const topApex = ref(null);
-const rightApex = ref(null);
-const leftApex = ref(null);
-const sourceDropzone = ref(null);
-
-const base = computed(() => store.state.base);
-
-onMounted(() => {
-    enableDropzones();
-    registerBase();
-});
-
-function registerBase() {
-    store.dispatch("setActiveBase", {
-        type: "triangle",
-        apexes: [
-            {
-                id: "top_apex",
-            },
-            {
-                id: "right_apex",
-            },
-            {
-                id: "left_apex",
-            },
-        ],
-        synergies: [
-            {
-                id: "left_synergy_apex",
-                parents: ["top_apex", "left_apex"],
-            },
-            {
-                id: "right_synergy_apex",
-                parents: ["top_apex", "right_apex"],
-            },
-            {
-                id: "bottom_synergy_apex",
-                parents: ["left_apex", "right_apex"],
-            },
-        ],
-        sources: [{ id: "sourceDropzone" }],
-    });
-}
-
-function enableDropzones() {
-    // Top Apex Dropzone
-    interact(topApex.value).dropzone({
-        accept: ".sg-element__orb",
-        ondrop: onElementDrop,
-    });
-    interact(rightApex.value).dropzone({
-        accept: ".sg-element__orb",
-        ondrop: onElementDrop,
-    });
-    interact(leftApex.value).dropzone({
-        accept: ".sg-element__orb",
-        ondrop: onElementDrop,
-    });
-
-    interact(sourceDropzone.value).dropzone({
-        accept: ".sg-source__orb",
-        ondrop: onSourceDrop,
-    });
-}
-
-function onElementDrop(event) {
-    store.dispatch("dropElement", {
-        apex: event.target.id,
-        element: event.relatedTarget.dataset.element,
-    });
-}
-function onSourceDrop(event) {
-    store.dispatch("dropSource", {
-        source: event.target.id,
-        element: event.relatedTarget.dataset.element,
-    });
-}
-</script>
 
 <style scoped lang="scss">
 .sg-base-rectangle {

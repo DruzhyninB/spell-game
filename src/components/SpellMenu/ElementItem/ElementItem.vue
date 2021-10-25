@@ -1,17 +1,18 @@
 <script setup>
 import interact from "interactjs";
 import { ref, onMounted, reactive, inject } from "vue";
-const audio = inject('audio');
+import { useStore } from "vuex";
 
+const audio = inject("audio");
 const props = defineProps({
     item: Object,
     className: String,
 });
-
+const store = useStore();
 const orb = ref(null);
 
 let state = reactive({
-    isMoving:false
+    isMoving: false,
 });
 
 onMounted(function () {
@@ -28,8 +29,8 @@ function resetPosition() {
     state.isMoving = false;
 }
 const startListener = () => {
-    audio.play('element-pickup');
-}
+    audio.play("element-pickup");
+};
 const moveListener = (event) => {
     var target = event.target;
     // keep the dragged position in the data-x/data-y attributes
@@ -48,7 +49,7 @@ const moveListener = (event) => {
 
 function onDragEnd() {
     resetPosition();
-    audio.play('element-drop');
+    audio.play("element-drop");
     state.isMoving = false;
 }
 
@@ -63,34 +64,52 @@ function enableDraggable() {
         },
     });
 }
+
+function onHover(isHover) {
+    if (isHover) {
+        store.dispatch("hoverElement", { elementId: props.item.id });
+    } else {
+        store.dispatch("hoverElement", { elementId: false });
+    }
+}
 </script>
 
 <template>
-    <div :class="`${className} sg-element`" :style="{'--primary':item.colors.primary,'--secondary':item.colors.secondary}">
+    <div
+        :class="`${className} sg-element`"
+        :style="{
+            '--primary': item.colors.primary,
+            '--secondary': item.colors.secondary,
+        }"
+        @mouseenter="onHover(true)"
+        @mouseleave="onHover(false)"
+    >
         <div ref="orb" :data-element="item.id" class="sg-element__orb">
             <div class="sg-element__icon">
                 <div class="sg-element__icon-spark"></div>
                 <div class="sg-element__icon-core"></div>
             </div>
         </div>
-        <div class="sg-element__title" v-if="!state.isMoving">{{ item.label }}</div>
+        <div class="sg-element__title" v-if="!state.isMoving">
+            {{ item.label }}
+        </div>
     </div>
 </template>
 
 <style scoped lang="scss">
 @keyframes element-spark-anim {
-    0%{
+    0% {
         width: 0%;
         height: 0%;
         border-width: 10px;
         opacity: 1;
     }
-    90%{
+    90% {
         border-width: 0;
         opacity: 0;
     }
     100% {
-        width:100%;
+        width: 100%;
         height: 100%;
         border-width: 0;
     }
@@ -120,7 +139,10 @@ function enableDraggable() {
 
         &-core {
             animation: element-core-anim ease-in-out 1s infinite;
-            background-image: radial-gradient(var(--primary) 35%, transparent 75%);
+            background-image: radial-gradient(
+                var(--primary) 35%,
+                transparent 75%
+            );
             width: 60%;
             height: 60%;
             background-size: 100% 100%;
@@ -135,7 +157,7 @@ function enableDraggable() {
             position: absolute;
             border-radius: 100%;
             border-style: solid;
-            border-color: var(--secondary);;
+            border-color: var(--secondary);
         }
     }
     &__title {
