@@ -1,6 +1,5 @@
 import {createStore} from 'vuex';
 
-import {getElements} from '../config/elements';
 import {getSynergies} from '../config/elements';
 import {getSources} from '../config/sources';
 import {getBases} from '../config/bases';
@@ -33,9 +32,7 @@ export default createStore({
         loaded (state, {system, loaded}) {
             state.loaded[system] = loaded;
         },
-        addElement (state, payload) {
-            state.elements.push(payload);
-        },
+
         resetActiveBase (state) {
             state.base = {
                 type: '',
@@ -61,9 +58,6 @@ export default createStore({
     getters: {
         isLoading: state => {
             return state.loaded.audio;
-        },
-        getElementById: state => id => {
-            return state.elements.find(e => e.id === id);
         },
         getSourceById: state => id => {
             return state.sources.find(e => e.id === id);

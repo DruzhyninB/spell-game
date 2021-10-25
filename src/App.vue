@@ -11,7 +11,7 @@ const audio = inject("audio");
 
 audio.loaded.then(() => {
     store.commit('loaded', {system:'audio', loaded:true});
-    audio.play('background', {loop:true, volume:0.05});
+    // audio.play('background', {loop:true, volume:0.05});
 });
 </script>
 
