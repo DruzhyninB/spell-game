@@ -1,77 +1,29 @@
 <script setup>
-import interact from "interactjs";
-import { ref, onMounted, reactive, inject } from "vue";
-import { useStore } from "vuex";
+import { inject } from "vue";
 
 const audio = inject("audio");
 const props = defineProps({
     item: Object,
     className: String,
 });
-const store = useStore();
-const orb = ref(null);
 
-let state = reactive({
-    isMoving: false,
-});
-
-onMounted(function () {
-    enableDraggable();
-});
-
-function resetPosition() {
-    orb.value.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
-
-    // update the posiion attributes
-    orb.value.setAttribute("data-x", 0);
-    orb.value.setAttribute("data-y", 0);
-
-    state.isMoving = false;
-}
-const startListener = () => {
+const onDragStart = (e) => {
+    e.dataTransfer.setData(
+        "payload",
+        JSON.stringify({
+            type: "element",
+            element: props.item,
+        })
+    );
     audio.play("element-pickup");
 };
-const moveListener = (event) => {
-    var target = event.target;
-    // keep the dragged position in the data-x/data-y attributes
-    var x = (parseFloat(target.getAttribute("data-x")) || 0) + event.dx;
-    var y = (parseFloat(target.getAttribute("data-y")) || 0) + event.dy;
-
-    // translate the element
-    target.style.transform = "translate(" + x + "px, " + y + "px)";
-
-    // update the posiion attributes
-    target.setAttribute("data-x", x);
-    target.setAttribute("data-y", y);
-
-    state.isMoving = true;
-};
-
-function onDragEnd() {
-    resetPosition();
-    audio.play("element-drop");
-    state.isMoving = false;
-}
-
-function enableDraggable() {
-    interact(orb.value).draggable({
-        inertia: true,
-        autoScroll: true,
-        listeners: {
-            start: startListener,
-            move: moveListener,
-            end: onDragEnd,
-        },
-    });
-}
-
-function onHover(isHover) {
-    if (isHover) {
-        store.dispatch("hoverElement", { elementId: props.item.id });
-    } else {
-        store.dispatch("hoverElement", { elementId: false });
-    }
-}
+// function onHover(isHover) {
+//     if (isHover) {
+//         store.dispatch("hoverElement", { elementId: props.item.id });
+//     } else {
+//         store.dispatch("hoverElement", { elementId: false });
+//     }
+// }
 </script>
 
 <template>
@@ -81,16 +33,14 @@ function onHover(isHover) {
             '--primary': item.colors.primary,
             '--secondary': item.colors.secondary,
         }"
-        @mouseenter="onHover(true)"
-        @mouseleave="onHover(false)"
     >
-        <div ref="orb" :data-element="item.id" class="sg-element__orb">
+        <div class="sg-element__orb" @dragstart="onDragStart" draggable="true">
             <div class="sg-element__icon">
                 <div class="sg-element__icon-spark"></div>
                 <div class="sg-element__icon-core"></div>
             </div>
         </div>
-        <div class="sg-element__title" v-if="!state.isMoving">
+        <div class="sg-element__title">
             {{ item.label }}
         </div>
     </div>
@@ -128,6 +78,7 @@ function onHover(isHover) {
 .sg-element {
     width: 100%;
     height: 100%;
+    opacity: 0.999;
     &__icon {
         width: 60px;
         height: 60px;

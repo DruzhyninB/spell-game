@@ -1,42 +1,8 @@
-/**
- * Добавить Елемент Разум из него можно развить заклинание Подчинение животных и людей, елементали
- */
-const mix = (color_1, color_2, weight = 50) => {
-    color_1 = color_1.substr(1);
-    color_2 = color_2.substr(1);
-    function d2h (d) {return d.toString(16);}
-    function h2d (h) {return parseInt(h, 16);}
-    var color = "#";
-    for (var i = 0; i <= 5; i += 2) {
-        var v1 = h2d(color_1.substr(i, 2)),
-            v2 = h2d(color_2.substr(i, 2)),
-            val = d2h(Math.floor(v2 + (v1 - v2) * (weight / 100.0)));
-
-        while (val.length < 2) {val = '0' + val;}
-
-        color += val;
-    }
-
-    return color;
-}
-
 export const getElements = () => {
-    return [...baseElements];
+    return [...elements];
 }
-export const getSynergies = () => {
-    return [...synergiesElements.map(synergy => {
-        let parent_1 = baseElements.find(e => e.id === synergy.parents[0][0]),
-            parent_2 = baseElements.find(e => e.id === synergy.parents[0][1]);
-        return {
-            ...synergy,
-            colors: {
-                primary: mix(parent_1.colors.primary, parent_2.colors.primary),
-                secondary: mix(parent_1.colors.secondary, parent_2.colors.secondary),
-            }
-        }
-    })];
-}
-const baseElements = [
+
+const elements = [
     {
         id: 'light',
         label: 'Свет',
@@ -99,126 +65,212 @@ const baseElements = [
             primary: '#ffd000',
             secondary: '#bdfdff'
         },
+    },
+    {
+        id: "chaos",
+        label: "Хаос",
+        description: "Хаос что неподвластен смертным",
+        parents: [
+            ["light", "dark"]
+        ],
+        colors: {
+            "primary": "#9d7c65",
+            "secondary": "#947e87"
+        }
+    },
+    {
+        id: "white_fire",
+        label: "Белое Пламя",
+        description: "Пламя что ослепляет своим сиянием!",
+        parents: [
+            ["light", "fire"]
+        ],
+        colors: {
+            "primary": "#f1a429",
+            "secondary": "#f1c05e"
+        }
+    },
+    {
+        id: "black_fire",
+        label: "Черное пламя",
+        description: "Пламя что пожирает сам свет!",
+        parents: [
+            ["dark", "fire"]
+        ],
+        colors: {
+            "primary": "#8f273c",
+            "secondary": "#864229"
+        }
+    }, {
+        id: "holy_water",
+        label: "Святая Вода",
+        description: "Чистая вода словно слеза Бога!",
+        parents: [
+            ["light", "water"]
+        ],
+        colors: {
+            "primary": "#7fb287",
+            "secondary": "#bce1de"
+        }
+    }, {
+        id: "poison",
+        label: "Яд",
+        description: "Смертельный яд!",
+        parents: [
+            ["electricity", "water"],
+            ["dark", "water"],
+            ["dark", "air"]
+        ],
+        colors: {
+            "primary": "#7f9d5e",
+            "secondary": "#9be1ff"
+        }
+    }, {
+        id: "steam",
+        label: "Пар",
+        description: "Непроглядные клубы пара!",
+        parents: [
+            ["fire", "water"]
+        ],
+        colors: {
+            "primary": "#715d5e",
+            "secondary": "#aea47f"
+        }
+    }, {
+        id: "flash",
+        label: "Вспышка",
+        description: "Яркое сияние что лишает зрения!",
+        parents: [
+            ["light", "air"]
+        ],
+        colors: {
+            "primary": "#effba8",
+            "secondary": "#f6fdde"
+        }
+    }, {
+        id: "fire_tornado",
+        label: "Огненое торнадо",
+        description: "Ураган пламени что разрушает и превращает в пепел все на своем пути!",
+        parents: [
+            ["fire", "air"]
+        ],
+        colors: {
+            "primary": "#e1a67f",
+            "secondary": "#e8c17f"
+        }
+    }, {
+        id: "ice",
+        label: "Лед",
+        description: "Глыба льда что тверже камня!",
+        parents: [
+            ["air", "water"]
+        ],
+        colors: {
+            "primary": "#70b4de",
+            "secondary": "#b3e1ff"
+        }
+    }, {
+        id: "life",
+        label: "Жизнь",
+        description: "Источник жизненой сили!",
+        parents: [
+            ["light", "earth"]
+        ],
+        colors: {
+            "primary": "#c8a229",
+            "secondary": "#bba56f"
+        }
+    }, {
+        id: "corruption",
+        label: "Разложение",
+        description: "Разрушительное влияние что отравляет саму суть вещей!",
+        parents: [
+            ["dark", "earth"]
+        ],
+        colors: {
+            "primary": "#66253c",
+            "secondary": "#50273a"
+        }
+    }, {
+        id: "lava",
+        label: "Лава",
+        description: "Поток жаркой магмы!",
+        parents: [
+            ["fire", "earth"]
+        ],
+        colors: {
+            "primary": "#ba4d00",
+            "secondary": "#ad6911"
+        }
+    }, {
+        id: "tree",
+        label: "Дерево",
+        description: "Дерево породы что тверже самой стали!",
+        parents: [
+            ["water", "earth"]
+        ],
+        colors: {
+            "primary": "#485b5e",
+            "secondary": "#798990"
+        }
+    }, {
+        id: "dust",
+        label: "Пыль",
+        description: "Мелкие частички земли способные забрятся куда угодно!",
+        parents: [
+            ["air", "earth"]
+        ],
+        colors: {
+            "primary": "#b8a47f",
+            "secondary": "#b2a690"
+        }
+    }, {
+        id: "teleport",
+        label: "Телепорт",
+        description: "Мгновенное перемещение материи на любые растояния!",
+        parents: [
+            ["electricity", "light"]
+        ],
+        colors: {
+            "primary": "#ffe429",
+            "secondary": "#defdde"
+        }
+    }, {
+        id: "dark_ightning",
+        label: "Темная молния",
+        description: "Мновенный разряд енергии что поражает саму суть души!",
+        parents: [
+            ["electricity", "dark"]
+        ],
+        colors: {
+            "primary": "#9d683c",
+            "secondary": "#737ea8"
+        }
+    }, {
+        id: "plasma",
+        label: "Плазма",
+        description: "Поток вещества что горячее самого Солнца!",
+        parents: [
+            ["electricity", "fire"],
+            ["electricity", "air"]
+        ],
+        colors: {
+            "primary": "#f18f00",
+            "secondary": "#d0c07f"
+        }
+    }, {
+        id: "explosion",
+        label: "Взрыв",
+        description: "Ударная волна енергии!",
+        parents: [
+            ["electricity", "earth"]
+        ],
+        colors: {
+            "primary": "#c88d00",
+            "secondary": "#9aa590"
+        }
     }
 ];
-
-const synergiesElements = [
-    {
-        id: 'chaos',
-        label: 'Хаос',
-        description: 'Хаос что неподвластен смертным',
-        parents: [['light', 'dark']],
-    },
-    {
-        id: 'white_fire',
-        label: 'Белое Пламя',
-        description: 'Пламя что ослепляет своим сиянием!',
-        parents: [['light', 'fire']],
-    },
-    {
-        id: 'black_fire',
-        label: 'Черное пламя',
-        description: 'Пламя что пожирает сам свет!',
-        parents: [['dark', 'fire']],
-    },
-    {
-        id: 'holy_water',
-        label: 'Святая Вода',
-        description: 'Чистая вода словно слеза Бога!',
-        parents: [['light', 'water'],]
-    },
-    {
-        id: 'poison',
-        label: 'Яд',
-        description: 'Смертельный яд!',
-        parents: [
-            ['electricity', 'water'],
-            ['dark', 'water'],
-            ['dark', 'air'],
-        ],
-    },
-    {
-        id: 'steam',
-        label: 'Пар',
-        description: 'Непроглядные клубы пара!',
-        parents: [['fire', 'water']],
-    },
-    {
-        id: 'flash',
-        label: 'Вспышка',
-        description: 'Яркое сияние что лишает зрения!',
-        parents: [['light', 'air']],
-    },
-    {
-        id: 'fire_tornado',
-        label: 'Огненое торнадо',
-        description: 'Ураган пламени что разрушает и превращает в пепел все на своем пути!',
-        parents: [['fire', 'air']],
-    },
-    {
-        id: 'ice',
-        label: 'Лед',
-        description: 'Глыба льда что тверже камня!',
-        parents: [['air', 'water']],
-    },
-    {
-        id: 'life',
-        label: 'Жизнь',
-        description: 'Источник жизненой сили!',
-        parents: [['light', 'earth']],
-    },
-    {
-        id: 'corruption',
-        label: 'Разложение',
-        description: 'Разрушительное влияние что отравляет саму суть вещей!',
-        parents: [['dark', 'earth']],
-    },
-    {
-        id: 'lava',
-        label: 'Лава',
-        description: 'Поток жаркой магмы!',
-        parents: [['fire', 'earth']],
-    },
-    {
-        id: 'tree',
-        label: 'Дерево',
-        description: 'Дерево породы что тверже самой стали!',
-        parents: [['water', 'earth']],
-    },
-    {
-        id: 'dust',
-        label: 'Пыль',
-        description: 'Мелкие частички земли способные забрятся куда угодно!',
-        parents: [['air', 'earth']],
-    },
-    {
-        id: 'teleport',
-        label: 'Телепорт',
-        description: 'Мгновенное перемещение материи на любые растояния!',
-        parents: [['electricity', 'light']],
-    },
-    {
-        id: 'dark_ightning',
-        label: 'Темная молния',
-        description: 'Мновенный разряд енергии что поражает саму суть души!',
-        parents: [['electricity', 'dark']],
-    },
-    {
-        id: 'plasma',
-        label: 'Плазма',
-        description: 'Поток вещества что горячее самого Солнца!',
-        parents: [
-            ['electricity', 'fire'],
-            ['electricity', 'air'],
-        ],
-    },
-    {
-        id: 'explosion',
-        label: 'Взрыв',
-        description: 'Ударная волна енергии!',
-        parents: [['electricity', 'earth']],
-    }
-]
 /**
  * Light
  * Dark

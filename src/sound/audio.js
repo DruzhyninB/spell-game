@@ -1,5 +1,6 @@
 import Buffer from './assets/Buffer';
 import Sound from './assets/Sound';
+import sounds from '../config/sounds';
 
 export class AudioPlayer {
     constructor(soundMap) {
@@ -29,10 +30,9 @@ export class AudioPlayer {
     }
 }
 
-
-
 export default {
-    install: (app, sounds) => {
-        app.provide('audio', new AudioPlayer(sounds));
+    instance: new AudioPlayer(sounds),
+    install (app) {
+        app.provide('audio', this.instance);
     }
-}
+};

@@ -5,13 +5,11 @@ import App from './App.vue'
 
 // plugins
 import store from './store/Store';
-import audio from './sound/vue-audio-plugin';
+import audio from './sound/audio';
 import directives from './directives/directives';
-
-import sounds from './config/sounds';
 
 const app = createApp(App);
 app.use(store);
 app.use(directives);
-app.use(audio, sounds);
+app.use(audio);
 app.mount('#app');

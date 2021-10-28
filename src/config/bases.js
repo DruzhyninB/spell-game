@@ -1,10 +1,10 @@
 export const getBases = () => {
-    return bases;
+    return [...bases];
 }
 
 export const bases = [
     {
-        name:'Rectangle',
-        type:'rectangle'
+        id:'rectangle',
+        name:'Rectangle'
     }
 ]

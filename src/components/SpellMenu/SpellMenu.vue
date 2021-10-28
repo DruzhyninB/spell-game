@@ -6,8 +6,9 @@ import ElementItem from "./ElementItem/ElementItem.vue";
 import SourceItem from "./SourceItem/SourceItem.vue";
 
 const store = useStore();
-const elements = computed(() => store.state.elements);
-const sources = computed(() => store.state.sources);
+const elements = computed(() => store.getters["elements/baseElements"]);
+const sources = computed(() => store.state.sources.sources);
+console.log(sources);
 
 let state = reactive({
     activeTab: 0,

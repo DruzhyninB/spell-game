@@ -1,17 +1,43 @@
 <script setup>
-import Rectangle from '../spell-components/Bases/Rectangle.vue'
+import { onMounted, ref } from "vue";
+import * as sgKonvaService from "../../services/konva";
+
+const canvasWrapper = ref(null);
+
+onMounted(function () {
+    sgKonvaService.initStage({
+        container: "spell-canvas",
+        width: canvasWrapper.value.offsetWidth,
+        height: canvasWrapper.value.offsetHeight,
+    });
+});
+
+function linkNode() {
+    sgKonvaService.linkNode();
+}
+
+function removeNode() {
+    sgKonvaService.removeNode();
+}
 </script>
 
 <template>
-    <div class="spell-canvas__wrapper" ref="root">
-        <div class="spell-canvas">
-            <Rectangle />
+    <div class="spell-canvas__wrapper">
+        <div ref="canvasWrapper" id="spell-canvas"></div>
+        <div
+            ref="contextMenu"
+            class="context-menu"
+            v-show="sgKonvaService.state.isContextMenuShown"
+            :style="sgKonvaService.state.contextMenuPosition"
+        >
+            <button @click="linkNode">Связать</button>
+            <button @click="removeNode">Убрать</button>
         </div>
     </div>
 </template>
  
 <style scoped>
-.spell-canvas {
+#spell-canvas {
     width: 75%;
     height: 75%;
     display: block;
@@ -36,5 +62,24 @@ import Rectangle from '../spell-components/Bases/Rectangle.vue'
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.context-menu {
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 0 5px grey;
+    border-radius: 3px;
+    z-index: 20;
+}
+
+.context-menu button {
+    width: 100%;
+    background-color: white;
+    border: none;
+    margin: 0;
+    padding: 10px;
+}
+
+.context-menu button:hover {
+    background-color: lightgray;
 }
 </style>

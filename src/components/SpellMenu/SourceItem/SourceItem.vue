@@ -1,61 +1,18 @@
 <script setup>
-import interact from "interactjs";
-import { ref, onMounted, reactive } from "vue";
-
 const props = defineProps({
     item: Object,
     className: String,
 });
 
-const orb = ref(null);
-let state = reactive({
-    isMoving:false
-});
-
-onMounted(function () {
-    enableDraggable();
-});
-
-function resetPosition() {
-    orb.value.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
-
-    // update the posiion attributes
-    orb.value.setAttribute("data-x", 0);
-    orb.value.setAttribute("data-y", 0);
-
-    state.isMoving = false;
-}
-const moveListener = (event) => {
-    var target = event.target;
-    // keep the dragged position in the data-x/data-y attributes
-    var x = (parseFloat(target.getAttribute("data-x")) || 0) + event.dx;
-    var y = (parseFloat(target.getAttribute("data-y")) || 0) + event.dy;
-
-    // translate the element
-    target.style.transform = "translate(" + x + "px, " + y + "px)";
-
-    // update the posiion attributes
-    target.setAttribute("data-x", x);
-    target.setAttribute("data-y", y);
-
-    state.isMoving = true;
+const onDragStart = (e) => {
+    e.dataTransfer.setData(
+        "payload",
+        JSON.stringify({
+            type: "source",
+            source: props.item,
+        })
+    );
 };
-
-function onDragEnd() {
-    resetPosition();
-    state.isMoving = false;
-}
-
-function enableDraggable() {
-    interact(orb.value).draggable({
-        inertia: true,
-        autoScroll: true,
-        listeners: {
-            move: moveListener,
-            end: onDragEnd,
-        },
-    });
-}
 </script>
 
 <template>
@@ -66,12 +23,14 @@ function enableDraggable() {
             '--secondary': item.colors.secondary,
         }"
     >
-        <div ref="orb" :data-element="item.id" class="sg-source__orb">
+        <div draggable="true" @dragstart="onDragStart">
             <div class="sg-source__icon">
                 <div class="sg-source__icon-core"></div>
             </div>
         </div>
-        <div class="sg-source__title" v-if="!state.isMoving">{{ item.label }}</div>
+        <div class="sg-source__title">
+            {{ item.label }}
+        </div>
     </div>
 </template>
 
@@ -96,6 +55,7 @@ function enableDraggable() {
 .sg-source {
     width: 100%;
     height: 100%;
+    opacity:.99;
     &__icon {
         width: 60px;
         height: 60px;
@@ -124,7 +84,7 @@ function enableDraggable() {
             &:after {
                 width: 2px;
                 height: 2px;
-                content: '';
+                content: "";
                 display: block;
                 border-radius: 50%;
                 background: transparent;
