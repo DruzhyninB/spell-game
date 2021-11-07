@@ -1,6 +1,7 @@
 <script setup>
 import { inject } from "vue";
-
+import { useStore } from "vuex";
+const store = useStore();
 const audio = inject("audio");
 const props = defineProps({
     item: Object,
@@ -17,13 +18,10 @@ const onDragStart = (e) => {
     );
     audio.play("element-pickup");
 };
-// function onHover(isHover) {
-//     if (isHover) {
-//         store.dispatch("hoverElement", { elementId: props.item.id });
-//     } else {
-//         store.dispatch("hoverElement", { elementId: false });
-//     }
-// }
+const onHover = (ishovered) => {
+    let target = ishovered ? props.item : undefined;
+    store.dispatch("dashboard/setTarget", { target });
+};
 </script>
 
 <template>
@@ -33,6 +31,7 @@ const onDragStart = (e) => {
             '--primary': item.colors.primary,
             '--secondary': item.colors.secondary,
         }"
+        v-hover="onHover"
     >
         <div class="sg-element__orb" @dragstart="onDragStart" draggable="true">
             <div class="sg-element__icon">
@@ -87,6 +86,7 @@ const onDragStart = (e) => {
         display: flex;
         align-items: center;
         justify-content: center;
+        cursor: grab;
 
         &-core {
             animation: element-core-anim ease-in-out 1s infinite;

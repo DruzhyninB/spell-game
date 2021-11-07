@@ -1,4 +1,6 @@
 <script setup>
+import { useStore } from "vuex";
+const store = useStore();
 const props = defineProps({
     item: Object,
     className: String,
@@ -13,6 +15,11 @@ const onDragStart = (e) => {
         })
     );
 };
+
+const onHover = (ishovered) => {
+    let target = ishovered ? props.item : undefined;
+    store.dispatch("dashboard/setTarget", { target });
+};
 </script>
 
 <template>
@@ -22,11 +29,10 @@ const onDragStart = (e) => {
             '--primary': item.colors.primary,
             '--secondary': item.colors.secondary,
         }"
+        v-hover="onHover"
     >
-        <div draggable="true" @dragstart="onDragStart">
-            <div class="sg-source__icon">
-                <div class="sg-source__icon-core"></div>
-            </div>
+        <div class="sg-source__icon" draggable="true" @dragstart="onDragStart">
+            <div class="sg-source__icon-core"></div>
         </div>
         <div class="sg-source__title">
             {{ item.label }}
@@ -55,7 +61,7 @@ const onDragStart = (e) => {
 .sg-source {
     width: 100%;
     height: 100%;
-    opacity:.99;
+    opacity: 0.99;
     &__icon {
         width: 60px;
         height: 60px;
@@ -64,6 +70,7 @@ const onDragStart = (e) => {
         display: flex;
         align-items: center;
         justify-content: center;
+        cursor: grab;
 
         &-core {
             animation: element-core-anim ease-in-out 1s infinite;

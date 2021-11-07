@@ -12,7 +12,7 @@ import SpellDashboard from "../SpellDashboard/SpellDashboard.vue";
             </div>
             <div class="col-4">
                 <SpellMenu />
-                <!-- <SpellDashboard /> -->
+                <SpellDashboard />
             </div>
         </div>
     </section>

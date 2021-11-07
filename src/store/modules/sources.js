@@ -1,6 +1,5 @@
 
 import {getSources} from '../../config/sources';
-console.log(getSources());
 const state = () => ({
     sources: getSources()
 });

@@ -18,9 +18,9 @@ const getters = {
     baseElements: state => {
         return state.elements.filter(e => !e.parents);
     },
-    getElementByParentElements: state => (parentElements) => {
-        if (parentElements[0] && parentElements[1]) {
-            let elementsIds = parentElements.map(e => e.id);
+    getElementByParents: state => (parents) => {
+        if (parents[0] && parents[1]) {
+            let elementsIds = parents.map(e => e.id);
             let el = state.elements.find(e => e.parents?.some(p => p.every(p => elementsIds.includes(p))));
             return el;
         } else {

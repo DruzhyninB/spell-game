@@ -1,6 +1,7 @@
 const state = () => ({
     apexes: {}, // {id:{apex}}
     cores: {}, // {id:{source}}
+    shapes: {}, // {id:{source}}
 });
 
 const mutations = {
@@ -12,22 +13,25 @@ const mutations = {
     removeApex (state, {id}) {
         delete state.apexes[id];
     },
+
     addCore (state, {id, source}) {
         state.cores[id] = {
             source
-        }
+        };
     },
-    removeCore (state, {id, source}) {
-        state.cores[id] = {
-            source
-        }
+    removeCore (state, {id}) {
+        delete state.cores[id];
     },
-    // setElementToApex (state, {apexId, element}) {
-    //     state.apexes[apexId].element = element;
-    // },
-    // setSourceToCore (state, {coreId, source}) {
-    //     state.cores[coreId].source = source;
-    // },
+
+    addShape (state, {id, shape}) {
+        state.shapes[id] = {
+            shape
+        };
+    },
+    removeShape (state, {id}) {
+        delete state.shapes[id];
+    },
+    
     reset (state) {
         state.base = {};
         state.apexes = {};
@@ -37,7 +41,9 @@ const mutations = {
 }
 
 const getters = {
-
+    getById () {
+        return [...state.apexes, ...state.cores].find(e => e.id === id);
+    }
 }
 
 const actions = {

@@ -4,11 +4,12 @@ import { computed, reactive } from "vue";
 
 import ElementItem from "./ElementItem/ElementItem.vue";
 import SourceItem from "./SourceItem/SourceItem.vue";
+import ShapeItem from "./ShapeItem/ShapeItem.vue";
 
 const store = useStore();
 const elements = computed(() => store.getters["elements/baseElements"]);
 const sources = computed(() => store.state.sources.sources);
-console.log(sources);
+const shapes = computed(() => store.state.shapes.shapes);
 
 let state = reactive({
     activeTab: 0,
@@ -36,13 +37,6 @@ let state = reactive({
                 class="spell-menu__bar-item"
                 :class="{ active: state.activeTab === 2 }"
                 @click="state.activeTab = 2"
-            >
-                Базы
-            </div>
-            <div
-                class="spell-menu__bar-item"
-                :class="{ active: state.activeTab === 3 }"
-                @click="state.activeTab = 3"
             >
                 Формы
             </div>
@@ -72,12 +66,15 @@ let state = reactive({
             </div>
         </div>
         <div class="spell-menu__wrapper" v-if="state.activeTab === 2">
-            <div class="spell-menu__title">Базы</div>
-            <div class="spell-menu__container"></div>
-        </div>
-        <div class="spell-menu__wrapper" v-if="state.activeTab === 3">
             <div class="spell-menu__title">Формы</div>
-            <div class="spell-menu__container"></div>
+            <div class="spell-menu__container">
+                <ShapeItem
+                    :className="'spell-menu__item'"
+                    :item="shape"
+                    v-for="shape in shapes"
+                    :key="shape.id"
+                />
+            </div>
         </div>
     </div>
 </template>

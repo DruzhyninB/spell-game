@@ -2,15 +2,15 @@
 import { useStore } from "vuex";
 import { computed } from "vue";
 const store = useStore();
-const element = computed(() => store.state.dashboard.element);
+console.log(store);
+const target = computed(() => store.state.dashboard.target);
 </script>
 
 <template>
     <div class="spell-dashboard" ref="root">
-        <div v-if="element">
-            <div class="sd-element-type">Елемент</div>
-            <div class="sd-element-name">{{element.label}}</div>
-            <div class="sd-element-description">{{element.description}}</div>
+        <div v-if="target">
+            <div class="sd-element-name">{{ target.label }}</div>
+            <div class="sd-element-description">{{ target.description }}</div>
         </div>
     </div>
 </template>
@@ -23,12 +23,12 @@ const element = computed(() => store.state.dashboard.element);
     background-color: white;
     padding: 2rem;
 }
-.sd{
-    &-element{
-        &-name{
+.sd {
+    &-element {
+        &-name {
             font-size: 2rem;
         }
-        &-description{
+        &-description {
             font-size: 1.5rem;
         }
     }
