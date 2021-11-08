@@ -2,7 +2,6 @@
 import { useStore } from "vuex";
 import { computed } from "vue";
 const store = useStore();
-console.log(store);
 const target = computed(() => store.state.dashboard.target);
 </script>
 

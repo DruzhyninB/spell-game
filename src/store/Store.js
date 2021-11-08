@@ -7,8 +7,6 @@ import sources from './modules/sources';
 import shapes from './modules/shapes';
 import spell from './modules/spell';
 
-console.log(sources);
-
 const store = createStore({
     modules: {
         dashboard,

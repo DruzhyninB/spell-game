@@ -3,7 +3,10 @@
  */
 
 export const getSources = () => {
-    return [...sources];
+    return sources.map(s => ({
+        ...s,
+        type: 'source'
+    }));
 }
 const sources = [
     {

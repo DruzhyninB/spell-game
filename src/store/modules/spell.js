@@ -1,38 +1,53 @@
+import {getFormulas} from '../../config/formulas';
 const state = () => ({
+    formulas: getFormulas(),
     apexes: {}, // {id:{apex}}
     cores: {}, // {id:{source}}
     shapes: {}, // {id:{source}}
+    connections: {}, // {id:{parents[id]}}
 });
 
 const mutations = {
-    addApex (state, {id, element}) {
+    addApex(state, { id, element }) {
         state.apexes[id] = {
-            element
+            ...element
         };
     },
-    removeApex (state, {id}) {
+    removeApex(state, { id }) {
         delete state.apexes[id];
     },
 
-    addCore (state, {id, source}) {
+    addCore(state, { id, source }) {
         state.cores[id] = {
-            source
+            ...source
         };
     },
-    removeCore (state, {id}) {
+    removeCore(state, { id }) {
         delete state.cores[id];
     },
 
-    addShape (state, {id, shape}) {
+    addShape(state, { id, shape }) {
         state.shapes[id] = {
-            shape
+            ...shape
         };
     },
-    removeShape (state, {id}) {
+    removeShape(state, { id }) {
         delete state.shapes[id];
     },
-    
-    reset (state) {
+
+    addConnection(state, { id, connection }) {
+        state.connections[id] = {
+            connection,
+            parents: connection.nodes.map(node => {
+                return node.getAttr("payload").id;
+            })
+        };
+    },
+    removeConnection(state, { id }) {
+        delete state.connections[id];
+    },
+
+    reset(state) {
         state.base = {};
         state.apexes = {};
         state.sources = {};
@@ -41,28 +56,31 @@ const mutations = {
 }
 
 const getters = {
-    getById () {
+    getById(state) {
         return [...state.apexes, ...state.cores].find(e => e.id === id);
+    },
+    getSpellSchema(state) {
+        return {
+            connections: Object.values(state.connections).map(c => c.parents),
+            sources: Object.values(state.cores).map(c => c.id),
+            elements: Object.values(state.apexes).map(c => c.id),
+            shapes: Object.values(state.shapes).map(c => c.id)
+        }
     }
 }
 
 const actions = {
-    digestSynergies ({commit, state, rootGetters}) {
-        for (const apexId in state.apexes) {
-            let apex = state.apexes[apexId];
-            if (apex.parents) {
-                let parentElements = [
-                    state.apexes[apex.parents[0]].element,
-                    state.apexes[apex.parents[1]].element
-                ];
-                let element = rootGetters['elements/getElementByParentElements'](parentElements);
 
-                if (element) {
-                    commit('setElementToApex', {apexId, element})
-                }
-            }
+    generateSpell({ state, getters }) {
+        let spellSchema = getters['getSpellSchema'], result;
+
+        for (const formula of state.formulas) {
+            result = formula.test(spellSchema);
+            if (result) break
         }
-    },
+
+        console.log(result);
+    }
 }
 
 export default {

@@ -1,5 +1,8 @@
 export const getElements = () => {
-    return [...elements];
+    return elements.map(s => ({
+        ...s,
+        type: 'element'
+    }));
 }
 
 const elements = [
@@ -183,7 +186,7 @@ const elements = [
     }, {
         id: "corruption",
         label: "Разложение",
-        description: "Разрушительное влияние что отравляет саму суть вещей!",
+        description: "Разрушительное влияние что разрушает саму суть вещей!",
         parents: [
             ["dark", "earth"]
         ],
@@ -224,18 +227,8 @@ const elements = [
             "primary": "#b8a47f",
             "secondary": "#b2a690"
         }
-    }, {
-        id: "teleport",
-        label: "Телепорт",
-        description: "Мгновенное перемещение материи на любые растояния!",
-        parents: [
-            ["electricity", "light"]
-        ],
-        colors: {
-            "primary": "#ffe429",
-            "secondary": "#defdde"
-        }
-    }, {
+    },
+    {
         id: "dark_ightning",
         label: "Темная молния",
         description: "Мновенный разряд енергии что поражает саму суть души!",
@@ -252,7 +245,8 @@ const elements = [
         description: "Поток вещества что горячее самого Солнца!",
         parents: [
             ["electricity", "fire"],
-            ["electricity", "air"]
+            ["electricity", "air"],
+            ["electricity", "light"]
         ],
         colors: {
             "primary": "#f18f00",
