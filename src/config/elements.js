@@ -184,8 +184,8 @@ const elements = [
             "secondary": "#bba56f"
         }
     }, {
-        id: "corruption",
-        label: "Разложение",
+        id: "distruction",
+        label: "Разрушение",
         description: "Разрушительное влияние что разрушает саму суть вещей!",
         parents: [
             ["dark", "earth"]

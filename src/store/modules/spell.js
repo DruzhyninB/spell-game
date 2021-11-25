@@ -39,7 +39,7 @@ const mutations = {
         state.connections[id] = {
             connection,
             parents: connection.nodes.map(node => {
-                return node.getAttr("payload").id;
+                return node.getAttr("payload");
             })
         };
     },
@@ -62,9 +62,9 @@ const getters = {
     getSpellSchema(state) {
         return {
             connections: Object.values(state.connections).map(c => c.parents),
-            sources: Object.values(state.cores).map(c => c.id),
-            elements: Object.values(state.apexes).map(c => c.id),
-            shapes: Object.values(state.shapes).map(c => c.id)
+            sources: Object.values(state.cores),
+            elements: Object.values(state.apexes),
+            shapes: Object.values(state.shapes)
         }
     }
 }
